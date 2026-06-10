@@ -173,7 +173,7 @@ or anything until there's error
    * SELECT id, product, price FROM products WHERE category = '' UNION SELECT null, username, password FROM users --
 
 ---
-##Cute lil Summary
+## Cute lil Summary
      * Payloads design exposes why traditional "input filters" or "blacklist filters" fails; too many ways to bypass
      * Suggested ways to secure from those attacks are as following:
      * XSS: Use context-aware output encoding.
