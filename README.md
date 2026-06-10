@@ -4,9 +4,9 @@
 
 ---
 
-## DIY XSS Payload
+# DIY XSS Payload
 
-### 1. Identify the Context
+## 1. Identify the Context
 
 First, determine where your input lands in the page.
 
@@ -30,7 +30,7 @@ let name = 'USER_INPUT';
 
 ---
 
-### 2. Boundary Escaping
+## 2. Boundary Escaping
 
 A payload typically works by breaking out of the boundary that the application expects your input to stay inside.
 
@@ -58,7 +58,7 @@ Stay inside the tag and introduce an event handler:
 
 ---
 
-### 3. Bypass Techniques
+## 3. Bypass Techniques
 
 Sometimes simple payloads are filtered or blocked.
 
@@ -96,9 +96,9 @@ Or experimenting with variations such as:
 
 ---
 
-## DIY SQL Payload
+# DIY SQL Payload
 
-### 1. Understand the Backend Query
+## 1. Understand the Backend Query
 
 A login form or search feature may interact with a query similar to:
 
@@ -110,7 +110,7 @@ AND password = 'PASSWORD';
 
 ---
 
-### 2. Break the SQL Syntax
+## 2. Break the SQL Syntax
 
 To manipulate a query, the first step is often breaking out of the string literal.
 
@@ -134,7 +134,7 @@ This produces a syntax error because the quotes are no longer balanced.
 
 ---
 
-### 3. Bypass
+## 3. Bypass
 
 The goal is to turn an error condition into a valid statement.
 
@@ -158,32 +158,80 @@ WHERE username = '' OR 1=1 -- '
 AND password = 'PASSWORD';
 ```
 
-4. Extracting Data
-   * If data wants to be stolen from other tables, one of the methods is to design a UNION payload
-   * It combine result of injected query + original query
-   * How to design a UNION payload:
-   * 1. Determine no. of columns of original query using:
-        '''sql
-        ' ORDER BY 1--, ' ORDER BY 2--
-        '''
-or anything until there's error
-   * 2. Match the data types of those columns
-   * 3. The Payload: ' UNION SELECT null, username, password FROM users --
-   * How database sees it:
-   * SELECT id, product, price FROM products WHERE category = '' UNION SELECT null, username, password FROM users --
+---
+
+## 4. Extracting Data
+
+If data is retrieved from other tables, one approach is to design a `UNION`-based payload.
+
+A `UNION` combines the result of the injected query with the result of the original query.
+
+### General Process
+
+1. Determine the number of columns returned by the original query.
+
+   Example:
+
+   ```sql
+   ' ORDER BY 1--
+   ' ORDER BY 2--
+   ```
+
+   Continue incrementing until an error occurs.
+
+2. Match the data types of those columns.
+
+3. Construct a compatible `UNION SELECT` statement.
+
+Example:
+
+```sql
+' UNION SELECT null, username, password FROM users --
+```
+
+Resulting query:
+
+```sql
+SELECT id, product, price
+FROM products
+WHERE category = ''
+UNION
+SELECT null, username, password
+FROM users --
+```
 
 ---
-## Cute lil Summary
-* Payloads design exposes why traditional "input filters" or "blacklist filters" fails; too many ways to bypass
-* Suggested ways to secure from those attacks are as following:
-* XSS: Use context-aware output encoding.* Example: turn < to %lt so it will always treats input as data and never as code.
-* SQLi: Use parameterized Queries (Like prepared Statements)
-* It ensures database engines treats user input strictly as  literal value. which makes it structurally impossible to alter query logic.
-* Notes:
+
+# Cute Lil Summary
+
+Payload design demonstrates why traditional input filtering and blacklist-based filtering often fail: there are many possible variations and encodings that can achieve the same outcome.
+
+More robust defenses include:
+
+### XSS
+
+Use context-aware output encoding.
+
+Example:
+
+* Convert `<` into its encoded representation so that input is always treated as data rather than executable code.
+
+### SQL Injection
+
+Use parameterized queries (prepared statements).
+
+Benefits:
+
+* User input is treated strictly as a literal value.
+* Query structure cannot be modified by user-controlled input.
+* The database engine separates data from executable SQL logic.
+
+---
+
+## Notes
+
 * `OR 1=1` evaluates as true.
-* `--` or `#` can mark the rest of the statement as a comment, preventing the remaining portion from being processed.
-
----
+* `--` or `#` can mark the remainder of a statement as a comment, preventing the rest of the query from being processed.
 
 
 
