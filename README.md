@@ -174,14 +174,12 @@ or anything until there's error
 
 ---
 ## Cute lil Summary
-     * Payloads design exposes why traditional "input filters" or "blacklist filters" fails; too many ways to bypass
-     * Suggested ways to secure from those attacks are as following:
-     * XSS: Use context-aware output encoding.
-     * Example: turn < to %lt so it will always treats input as data and never as code.
-     * SQLi: Use parameterized Queries (Like prepared Statements)
-     * It ensures database engines treats user input strictly as  literal value. which makes it structurally impossible to alter query logic.
-     * Notes:
-
+* Payloads design exposes why traditional "input filters" or "blacklist filters" fails; too many ways to bypass
+* Suggested ways to secure from those attacks are as following:
+* XSS: Use context-aware output encoding.* Example: turn < to %lt so it will always treats input as data and never as code.
+* SQLi: Use parameterized Queries (Like prepared Statements)
+* It ensures database engines treats user input strictly as  literal value. which makes it structurally impossible to alter query logic.
+* Notes:
 * `OR 1=1` evaluates as true.
 * `--` or `#` can mark the rest of the statement as a comment, preventing the remaining portion from being processed.
 
