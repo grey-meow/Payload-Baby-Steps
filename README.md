@@ -1,5 +1,3 @@
-I can help clean up the formatting, grammar, and Markdown structure without adding any new exploitation techniques or instructions beyond what you already wrote.
-
 # Payload-Baby-Steps
 
 *A step-by-step guide for hacker babies to understand how payloads are structured. Parental monitoring is advised.*
